@@ -1,43 +1,36 @@
-
 import React, { useEffect } from 'react';
 import Input from 'components/Input';
 import { Enum_Rol } from 'utils/enums';
-import DropDown from 'components/DropDown';
+import DropDown from 'components/Dropdown';
 import ButtonLoading from 'components/ButtonLoading';
 import useFormData from 'hooks/useFormData';
-import { REGISTRO } from 'graphql/usuario/auth/mutations';
+import { Link } from 'react-router-dom';
+import { REGISTRO } from 'graphql/auth/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
-import { useAuth } from 'context/auth.context';
-
+import { useAuth } from 'context/authContext';
 const Register = () => {
-
-  const {setToken} = useAuth();
+  const { setToken } = useAuth();
   const navigate = useNavigate();
-
   const { form, formData, updateFormData } = useFormData();
-  
   const [registro, { data: dataMutation, loading: loadingMutation, error: errorMutation }] =
-  useMutation(REGISTRO);
-  
+    useMutation(REGISTRO);
 
   const submitForm = (e) => {
     e.preventDefault();
-    console.log("enviar datos al back",formData);
-    registro({variables:formData});
-   
+  
+    registro({ variables: formData });
   };
-  useEffect(()=>{
-    console.log("data mutation", dataMutation);
-    if(dataMutation){
-      if(dataMutation.registro.token){
-        setToken ("token",dataMutation.registro.token);
-        navigate("/");
+
+  useEffect(() => {
+  
+    if (dataMutation) {
+      if (dataMutation.registro.token) {
+        setToken(dataMutation.registro.token);
+        navigate('/');
       }
     }
-  },[dataMutation,setToken,navigate]);
-
+  }, [dataMutation, setToken, navigate]);
   return (
     <div className='flex flex-col h-full w-full items-center justify-center'>
       <h1 className='text-3xl font-bold my-4'>Regístrate</h1>
@@ -52,7 +45,7 @@ const Register = () => {
         </div>
         <ButtonLoading
           disabled={Object.keys(formData).length === 0}
-          loading={loadingMutation}
+          loading={false}
           text='Registrarme'
         />
       </form>
@@ -63,5 +56,4 @@ const Register = () => {
     </div>
   );
 };
-
 export default Register;

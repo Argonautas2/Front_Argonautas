@@ -6,20 +6,22 @@ const GET_USUARIOS = gql`
       _id
       nombre
       apellido
-      identificacion
       correo
+      estado
+      identificacion
       rol
     }
   }
 `;
 
 const GET_USUARIO = gql`
-  query ($_id: String!) {
+  query Usuario($_id: String!) {
     Usuario(_id: $_id) {
       _id
       nombre
       apellido
       correo
+      estado
       identificacion
       rol
     }
