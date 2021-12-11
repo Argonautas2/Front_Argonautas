@@ -18,10 +18,9 @@ import Login from 'pages/auth/login';
 import { AuthContext } from 'context/authContext';
 import jwt_decode from 'jwt-decode';
 
-// import PrivateRoute from 'components/PrivateRoute';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: 'https://servidorgraphql-backmisiontic.herokuapp.com/graphql',
 });
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
