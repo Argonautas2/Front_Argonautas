@@ -4,4 +4,19 @@ const Enum_Rol = {
   LIDER: 'Líder',
 };
 
-export { Enum_Rol };
+const Enum_EstadoUsuario = {
+  PENDIENTE: 'Pendiente',
+  AUTORIZADO: 'Autorizado',
+  NO_AUTORIZADO: 'No autorizado',
+};
+const Enum_EstadoProyecto = {
+  ACTIVO: 'Activo',
+  INACTIVO: 'Inactivo',
+};
+
+const Enum_TipoObjetivo = {
+  GENERAL: 'General',
+  ESPECIFICO: 'Específico',
+};
+
+export { Enum_Rol, Enum_EstadoUsuario, Enum_TipoObjetivo, Enum_EstadoProyecto};
