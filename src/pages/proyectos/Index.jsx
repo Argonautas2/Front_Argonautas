@@ -38,9 +38,11 @@ const IndexProyectos = () => {
       <div className='p-10 flex flex-col items-center'>
         <h1 className='text-gray-900 text-xl font-bold uppercase'>Proyectos</h1>
         <div className='self-end my-5'>
+        <PrivateComponent roleList={['ADMINISTRADOR']}>
           <button className='bg-indigo-500 p-2 rounded-lg shadow-sm text-white hover:bg-indigo-400'>
             <Link to='/proyectos/nuevo'>Crear nuevo proyecto</Link>
           </button>
+        </PrivateComponent>  
         </div>
         {queryData.Proyectos.map((proyecto) => {
           return (
