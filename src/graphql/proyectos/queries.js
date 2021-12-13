@@ -12,6 +12,13 @@ const PROYECTOS = gql`
         tipo
       }
       
+      inscripciones{
+        estado
+        estudiante{
+          _id
+        }
+      }
+      
     }
    
   }

@@ -18,6 +18,7 @@ import { AuthContext } from 'context/authContext';
 import jwt_decode from 'jwt-decode';
 import NuevoProyecto from 'pages/proyectos/NuevoProyecto';
 import IndexProyectos from 'pages/proyectos/Index';
+import IndexInscripciones from 'pages/inscripciones';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000/graphql',
@@ -77,6 +78,7 @@ function App() {
                 <Route path='/usuarios/editar/:_id' element={<EditarUsuario />} />
                 <Route path='/proyectos' element={<IndexProyectos />} />
                 <Route path='/proyectos/nuevo' element={<NuevoProyecto />} />
+                <Route path='/inscripciones' element={<IndexInscripciones />} />
               </Route>
               <Route path='/auth' element={<AuthLayout />}>
                 <Route path='register' element={<Register />} />
