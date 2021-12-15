@@ -5,7 +5,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import { styled } from '@mui/material/styles';
 import { useMutation, useQuery } from '@apollo/client';
 import { PROYECTOS } from 'graphql/proyectos/queries';
-import DropDown from 'components/Dropdown';
+import DropDown from 'components/DropDown';
 import { Dialog } from '@mui/material';
 import { Enum_EstadoProyecto } from 'utils/enums';
 import ButtonLoading from 'components/ButtonLoading';
