@@ -14,6 +14,13 @@ const PROYECTOS = gql`
         _id
         correo
       }
+
+      inscripciones {
+        estado
+        estudiante {
+          _id
+        }
+      }
     }
   }
 `;
