@@ -26,7 +26,7 @@ import Profile from 'pages/profile';
 
 const httpLink = createHttpLink({
   uri: 'https://back-grapql-misionciclo4.herokuapp.com/graphql',
-  ///uri: 'http://localhost:4000/graphql',
+  //uri: 'http://localhost:4000/graphql',
 });
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
