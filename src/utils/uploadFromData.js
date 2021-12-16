@@ -6,11 +6,11 @@ const uploadFormData = async (formData) => {
       if (Object.prototype.isPrototypeOf.call(File.prototype, formData[field])) {
         const dt = new FormData();
         dt.append('file', formData[field]);
-        dt.append('upload_preset', 'vs8gsai6');
-        dt.append('cloud_name', 'danyel117');
+        dt.append('upload_preset', 'ahqpbehg');
+        dt.append('cloud_name', 'misiontic2022');
         const options = {
           method: 'POST',
-          url: 'https://api.cloudinary.com/v1_1/danyel117/image/upload',
+          url: 'https://api.cloudinary.com/v1_1/misiontic2022/image/upload',
           data: dt,
         };
         await axios
