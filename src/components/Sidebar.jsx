@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from 'context/authContext';
 import PrivateComponent from './PrivateComponent';
+import { useUser } from 'context/userContext';
 
 const SidebarLinks = () => {
   return (
     <ul className='mt-10'>
+      <SidebarRouteImagen to='/perfil' title='Perfil' icon='fas fa-user' />
       <SidebarRoute to='' title='Inicio' icon='fas fa-home' />
       <PrivateComponent roleList={['ADMINISTRADOR']}>
         <SidebarRoute to='/usuarios' title='Usuarios' icon='fas fa-user' />
       </PrivateComponent>
       <SidebarRoute to='/proyectos' title='Proyectos' icon='fas fa-address-card' />
+      <SidebarRoute to='/avances' title='Avances' icon='fas fa-book-open' />
       <PrivateComponent roleList={['ADMINISTRADOR', 'LIDER']}>
         <SidebarRoute to='/inscripciones' title='Aprobacion Inscripciones' icon='fas fa-book-reader' />
       </PrivateComponent>
@@ -43,7 +46,6 @@ const Logout = () => {
 const Logo = () => {
   return (
     <div className='py-2 w-full flex flex-col items-center justify-center'>
-      <img src='logo.png' alt='Logo' className='h-26' />
       <span className='my-2 text-xl font-bold text-center'>ARGONAUTAS GESTION DE PROYECTOS</span>
     </div>
   );
@@ -96,6 +98,30 @@ const SidebarRoute = ({ to, title, icon }) => {
       >
         <div className='flex items-center'>
           <i className={icon} />
+          <span className='text-sm  ml-2'>{title}</span>
+        </div>
+      </NavLink>
+    </li>
+  );
+};
+const SidebarRouteImagen = ({ to, title, icon }) => {
+  const { userData } = useUser();
+  return (
+    <li>
+      <NavLink
+        to={to}
+        className={({ isActive }) =>
+          isActive
+            ? 'sidebar-route text-white bg-indigo-700'
+            : 'sidebar-route text-gray-900 hover:text-white hover:bg-indigo-400'
+        }
+      >
+        <div className='flex items-center'>
+          {userData.foto ? (
+            <img className='h-8 w-8 rounded-full' src={userData.foto} alt='foto' />
+          ) : (
+            <i className={icon} />
+          )}
           <span className='text-sm  ml-2'>{title}</span>
         </div>
       </NavLink>
