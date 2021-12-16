@@ -15,18 +15,18 @@ import Register from 'pages/auth/register';
 import Login from 'pages/auth/login';
 import { AuthContext } from 'context/authContext';
 import IndexProyectos from 'pages/proyectos/Index';
-import IndexAvance from 'pages/avances/index'
 import jwt_decode from 'jwt-decode';
 import 'styles/globals.css';
 import 'styles/tabla.css';
 import NuevoProyecto from 'pages/proyectos/NuevoProyecto';
 import IndexInscripciones from 'pages/inscripciones';
 import Profile from 'pages/profile';
+
 // import PrivateRoute from 'components/PrivateRoute';
 
 const httpLink = createHttpLink({
-  uri: 'https://back-grapql-misionciclo4.herokuapp.com/graphql',
   //uri: 'http://localhost:4000/graphql',
+  uri: 'https://guarded-eyrie-66379.herokuapp.com/graphql',
 });
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -58,7 +58,7 @@ function App() {
   useEffect(() => {
     if (authToken) {
       const decoded = jwt_decode(authToken);
-      console.log ('decoded token', decoded);
+      console.log('decoded token', decoded);
       setUserData({
         _id: decoded._id,
         nombre: decoded.nombre,
@@ -83,7 +83,6 @@ function App() {
                 <Route path='/proyectos' element={<IndexProyectos />} />
                 <Route path='/proyectos/nuevo' element={<NuevoProyecto />} />
                 <Route path='/inscripciones' element={<IndexInscripciones />} />
-                <Route path='/avances/:projectid' element={<IndexAvance />} />
                 <Route path='/perfil' element={<Profile />} />
                 <Route path='page2' element={<Page2 />} />
                 <Route path='category1' element={<IndexCategory1 />} />
