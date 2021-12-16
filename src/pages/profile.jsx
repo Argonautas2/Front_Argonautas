@@ -4,7 +4,7 @@ import ButtonLoading from 'components/ButtonLoading';
 import Input from 'components/Input';
 import { EDITAR_PERFIL } from 'graphql/usuarios/mutations';
 import useFormData from 'hooks/useFormData';
-import { uploadFormData } from 'utils/uploadFormData';
+import { uploadFormData } from 'utils/uploadFromData';
 import { useUser } from 'context/userContext';
 import { GET_USUARIO } from 'graphql/usuarios/queries';
 import { toast } from 'react-toastify';

@@ -15,6 +15,7 @@ import Register from 'pages/auth/register';
 import Login from 'pages/auth/login';
 import { AuthContext } from 'context/authContext';
 import IndexProyectos from 'pages/proyectos/Index';
+import IndexAvance from 'pages/avances/index'
 import jwt_decode from 'jwt-decode';
 import 'styles/globals.css';
 import 'styles/tabla.css';
@@ -24,8 +25,8 @@ import Profile from 'pages/profile';
 // import PrivateRoute from 'components/PrivateRoute';
 
 const httpLink = createHttpLink({
-  //uri: 'https://back-grapql-misionciclo4.herokuapp.com/graphql',
-  uri: 'http://localhost:4000/graphql',
+  uri: 'https://back-grapql-misionciclo4.herokuapp.com/graphql',
+  ///uri: 'http://localhost:4000/graphql',
 });
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
