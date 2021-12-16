@@ -7,15 +7,17 @@ import { useMutation, useQuery } from "@apollo/client";
 import { PROYECTOS } from "graphql/proyectos/queries";
 import DropDown from "components/DropDown";
 import { Dialog } from "@mui/material";
-import { Enum_EstadoProyecto } from "utils/enums";
+import { Enum_EstadoProyecto, Enum_TipoObjetivo } from "utils/enums";
 import ButtonLoading from "components/ButtonLoading";
-import { EDITAR_PROYECTO } from "graphql/proyectos/mutations";
+import { EDITAR_PROYECTO, ELIMINAR_OBJETIVO, EDITAR_OBJETIVO } from "graphql/proyectos/mutations";
 import useFormData from "hooks/useFormData";
 import PrivateComponent from "components/PrivateComponent";
 import { Link } from "react-router-dom";
 import { CREAR_INSCRIPCION } from "graphql/inscripciones/mutations";
 import { useUser } from "context/userContext";
 import { toast } from "react-toastify";
+import ReactLoading from 'react-loading';
+import Input from 'components/Input';
 
 const AccordionStyled = styled((props) => <Accordion {...props} />)(
   ({ theme }) => ({
@@ -91,12 +93,19 @@ const AccordionProyecto = ({ proyecto }) => {
             />
           </PrivateComponent>
           <PrivateComponent roleList={["ESTUDIANTE"]}>
-            <InscripcionProyecto idProyecto={proyecto._id} estado={proyecto.estado} inscripciones={proyecto.inscripciones} />
+            <InscripcionProyecto
+              idProyecto={proyecto._id}
+              estado={proyecto.estado}
+              inscripciones={proyecto.inscripciones}
+            />
           </PrivateComponent>
           <div className="flex">
-            {proyecto.objetivos.map((objetivo) => {
+            {proyecto.objetivos.map((objetivo, index) => {
               return (
                 <Objetivo
+                  index={index}
+                  _id={objetivo._id}
+                  idProyecto={proyecto._id}
                   tipo={objetivo.tipo}
                   descripcion={objetivo.descripcion}
                 />
@@ -156,54 +165,161 @@ const FormEditProyecto = ({ _id }) => {
   );
 };
 
-const Objetivo = ({ tipo, descripcion }) => {
+const Objetivo = ({ index, _id, idProyecto, tipo, descripcion }) => {
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [
+    eliminarObjetivo,
+    { data: dataMutationEliminar, loading: eliminarLoading },
+  ] = useMutation(ELIMINAR_OBJETIVO, {
+    refetchQueries: [{ query: PROYECTOS }],
+  });
+
+  useEffect(() => {
+    if (dataMutationEliminar) {
+      toast.success("objetivo eliminado satisfactoriamente");
+    }
+  }, [dataMutationEliminar]);
+
+  const ejecutarEliminacion = () => {
+    eliminarObjetivo({ variables: { idProyecto, idObjetivo: _id } });
+  };
+
+  if (eliminarLoading)
+    return (
+      <ReactLoading
+        data-testid="loading-in-button"
+        type="spin"
+        height={100}
+        width={100}
+      />
+    );
   return (
     <div className="mx-5 my-4 bg-gray-50 p-8 rounded-lg flex flex-col items-center justify-center shadow-xl">
       <div className="text-lg font-bold">{tipo}</div>
       <div>{descripcion}</div>
       <PrivateComponent roleList={["ADMINISTRADOR", "LIDER"]}>
-        <i
-          className="mx-4 fas fa-pen text-yellow-600 hover:text-yellow-400"
-          onClick={() => {}}
-        />
+        <div className="flex my-2">
+          <button type="button" onClick={() => setShowEditDialog(true)}>
+            <i className="fas fa-pen mx-2 text-yellow-500 hover:text-yellow-200 cursor-pointer" />
+          </button>
+          <button type="button" onClick={ejecutarEliminacion}>
+            <i className="fas fa-trash mx-2 text-red-500 hover:text-red-200 cursor-pointer" />
+          </button>
+        </div>
+        <Dialog open={showEditDialog} onClose={() => setShowEditDialog(false)}>
+          <EditarObjetivo
+            descripcion={descripcion}
+            tipo={tipo}
+            index={index}
+            idProyecto={idProyecto}
+            setShowEditDialog={setShowEditDialog}
+          />
+        </Dialog>
       </PrivateComponent>
     </div>
   );
 };
-const InscripcionProyecto = ({idProyecto, estado, inscripciones}) => {
-  const [estadoInscripcion,setEstadoInscripcion]= useState('')
-  const {userData} = useUser();
-  const [crearInscripcion, { data, loading, error }] =
-  useMutation(CREAR_INSCRIPCION);
-useEffect(() => {
-  if(userData && inscripciones){
-    const flt = inscripciones.filter((el)=>el.estudiante._id===userData._id)
-    if(flt.length>0){
-      setEstadoInscripcion(flt[0].estado)
+
+const EditarObjetivo = ({
+  descripcion,
+  tipo,
+  index,
+  idProyecto,
+  setShowEditDialog,
+}) => {
+  const { form, formData, updateFormData } = useFormData();
+
+  const [editarObjetivo, { data: dataMutation, loading }] = useMutation(
+    EDITAR_OBJETIVO,
+    {
+      refetchQueries: [{ query: PROYECTOS }],
     }
-    
-    
-  }
-}, [userData,inscripciones]);
- useEffect(() => {
-   if(data){
-    console.log(data);
-    toast.success("Inscripción creada con éxito")
-   }
- }, [data]);
- const confirmarInscripcion = ()=>{
-  crearInscripcion({variables:{ proyecto: idProyecto, estudiante: userData._id}});
- }
-  return(
+  );
+
+  useEffect(() => {
+    if (dataMutation) {
+      toast.success("Objetivo editado con exito");
+      setShowEditDialog(false);
+    }
+  }, [dataMutation, setShowEditDialog]);
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    editarObjetivo({
+      variables: {
+        idProyecto,
+        indexObjetivo: index,
+        campos: formData,
+      },
+    }).catch((error) => {
+      toast.error("Error editando el objetivo", error);
+    });
+  };
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold text-gray-900">Editar Objetivo</h1>
+      <form ref={form} onChange={updateFormData} onSubmit={submitForm}>
+        <DropDown
+          label="Tipo de Objetivo"
+          name="tipo"
+          required
+          options={Enum_TipoObjetivo}
+          defaultValue={tipo}
+        />
+        <Input
+          label="Descripcion del objetivo"
+          name="descripcion"
+          required
+          defaultValue={descripcion}
+        />
+        <ButtonLoading
+          text="Confirmar"
+          disabled={Object.keys(formData).length === 0}
+          loading={loading}
+        />
+      </form>
+    </div>
+  );
+};
+
+const InscripcionProyecto = ({ idProyecto, estado, inscripciones }) => {
+  const [estadoInscripcion, setEstadoInscripcion] = useState("");
+  const { userData } = useUser();
+  const [crearInscripcion, { data, loading, error }] =
+    useMutation(CREAR_INSCRIPCION);
+  useEffect(() => {
+    if (userData && inscripciones) {
+      const flt = inscripciones.filter(
+        (el) => el.estudiante._id === userData._id
+      );
+      if (flt.length > 0) {
+        setEstadoInscripcion(flt[0].estado);
+      }
+    }
+  }, [userData, inscripciones]);
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+      toast.success("Inscripción creada con éxito");
+    }
+  }, [data]);
+  const confirmarInscripcion = () => {
+    crearInscripcion({
+      variables: { proyecto: idProyecto, estudiante: userData._id },
+    });
+  };
+  return (
     <>
-      {estadoInscripcion !== '' ? (
-        <span>Ya estas inscrito en este proyecto y el estado es {estadoInscripcion}</span>
+      {estadoInscripcion !== "" ? (
+        <span>
+          Ya estas inscrito en este proyecto y el estado es {estadoInscripcion}
+        </span>
       ) : (
         <ButtonLoading
           onClick={() => confirmarInscripcion()}
-          disabled={estado === 'INACTIVO'}
+          disabled={estado === "INACTIVO"}
           loading={loading}
-          text='Inscribirme en este proyecto'
+          text="Inscribirme en este proyecto"
         />
       )}
     </>
