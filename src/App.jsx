@@ -26,7 +26,7 @@ import Profile from 'pages/profile';
 
 const httpLink = createHttpLink({
   //uri: 'http://localhost:4000/graphql',
-  uri: 'https://guarded-eyrie-66379.herokuapp.com/graphql',
+  uri: 'https://back-grapql-misionciclo4.herokuapp.com/graphql',
 });
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists

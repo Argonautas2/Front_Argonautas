@@ -1,9 +1,8 @@
 import { gql } from '@apollo/client';
-
 const GET_USUARIOS = gql`
-query Query($filtro: FiltroUsuarios) {
-  Usuarios(filtro: $filtro) { 
-       _id
+  query Query($filtro: FiltroUsuarios) {
+    Usuarios(filtro: $filtro) {
+      _id
       nombre
       apellido
       correo
@@ -13,7 +12,6 @@ query Query($filtro: FiltroUsuarios) {
     }
   }
 `;
-
 const GET_USUARIO = gql`
   query Usuario($_id: String!) {
     Usuario(_id: $_id) {
@@ -28,5 +26,4 @@ const GET_USUARIO = gql`
     }
   }
 `;
-
 export { GET_USUARIOS, GET_USUARIO };

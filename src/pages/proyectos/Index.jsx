@@ -24,6 +24,7 @@ import { Enum_TipoObjetivo } from 'utils/enums';
 import { EDITAR_OBJETIVO } from 'graphql/proyectos/mutations';
 
 const IndexProyectos = () => {
+
   const { data: queryData, loading } = useQuery(PROYECTOS);
 
   useEffect(() => {
@@ -80,8 +81,8 @@ const AccordionProyecto = ({ proyecto }) => {
             />
           </PrivateComponent>
           <div>Liderado Por: {proyecto.lider.correo}</div>
-          < div className='flex'>
-          {proyecto.objetivos.map((objetivo, index) => {
+          <div className='flex'>
+            {proyecto.objetivos.map((objetivo, index) => {
               return (
                 <Objetivo
                   index={index}
@@ -136,6 +137,8 @@ const FormEditProyecto = ({ _id }) => {
     </div>
   );
 };
+
+
 const Objetivo = ({ index, _id, idProyecto, tipo, descripcion }) => {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [eliminarObjetivo, { data: dataMutationEliminar, loading: eliminarLoading }] = useMutation(
@@ -278,4 +281,3 @@ const InscripcionProyecto = ({ idProyecto, estado, inscripciones }) => {
   );
 };
 export default IndexProyectos;
-          
