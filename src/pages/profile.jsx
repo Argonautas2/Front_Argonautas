@@ -14,8 +14,10 @@ const Profile = () => {
   const { form, formData, updateFormData } = useFormData();
   const { userData, setUserData } = useUser();
 
-  const [editarPerfil, { data: dataMutation, error: errorMutation, loading: loadingMutation }] =
-    useMutation(EDITAR_PERFIL);
+  const [
+    editarPerfil,
+    { data: dataMutation, error: errorMutation, loading: loadingMutation },
+  ] = useMutation(EDITAR_PERFIL);
 
   const {
     data: queryData,
@@ -85,7 +87,11 @@ const Profile = () => {
         />
         {queryData.Usuario.foto && !editFoto ? (
           <div className='flex flex-col items-center'>
-            <img className='h-32' src={queryData.Usuario.foto} alt='Foto Usuario' />
+            <img
+              className='h-32'
+              src={queryData.Usuario.foto}
+              alt='Foto Usuario'
+            />
             <button
               onClick={() => setEditFoto(true)}
               className='bg-indigo-300 p-1 my-2 rounded-md text-white'
@@ -104,7 +110,11 @@ const Profile = () => {
             </button>
           </div>
         )}
-        <ButtonLoading text='Confirmar' loading={loadingMutation} disabled={false} />
+        <ButtonLoading
+          text='Confirmar'
+          loading={loadingMutation}
+          disabled={false}
+        />
       </form>
     </div>
   );

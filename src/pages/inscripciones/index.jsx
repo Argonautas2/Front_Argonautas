@@ -52,7 +52,9 @@ const AccordionInscripcion = ({ data, titulo, refetch = () => {} }) => {
         <div className='flex'>
           {data &&
             data.map((inscripcion) => {
-              return <Inscripcion inscripcion={inscripcion} refetch={refetch} />;
+              return (
+                <Inscripcion inscripcion={inscripcion} refetch={refetch} />
+              );
             })}
         </div>
       </AccordionDetailsStyled>
@@ -61,7 +63,8 @@ const AccordionInscripcion = ({ data, titulo, refetch = () => {} }) => {
 };
 
 const Inscripcion = ({ inscripcion, refetch }) => {
-  const [aprobarInscripcion, { data, loading, error }] = useMutation(APROBAR_INSCRIPCION);
+  const [aprobarInscripcion, { data, loading, error }] =
+    useMutation(APROBAR_INSCRIPCION);
 
   useEffect(() => {
     if (data) {

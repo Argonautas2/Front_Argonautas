@@ -24,7 +24,6 @@ import { Enum_TipoObjetivo } from 'utils/enums';
 import { EDITAR_OBJETIVO } from 'graphql/proyectos/mutations';
 
 const IndexProyectos = () => {
-
   const { data: queryData, loading } = useQuery(PROYECTOS);
 
   useEffect(() => {
@@ -35,7 +34,9 @@ const IndexProyectos = () => {
     return (
       <div className='p-10 flex flex-col'>
         <div className='flex w-full items-center justify-center'>
-          <h1 className='text-2xl font-bold text-gray-900'>Lista de Proyectos</h1>
+          <h1 className='text-2xl font-bold text-gray-900'>
+            Lista de Proyectos
+          </h1>
         </div>
         <PrivateComponent roleList={['ADMINISTRADOR', 'LIDER']}>
           <div className='my-2 self-end'>
@@ -57,7 +58,9 @@ const AccordionProyecto = ({ proyecto }) => {
   return (
     <>
       <AccordionStyled>
-        <AccordionSummaryStyled expandIcon={<i className='fas fa-chevron-down' />}>
+        <AccordionSummaryStyled
+          expandIcon={<i className='fas fa-chevron-down' />}
+        >
           <div className='flex w-full justify-between'>
             <div className='uppercase font-bold text-gray-100 '>
               {proyecto.nombre} - {proyecto.estado}
@@ -109,7 +112,8 @@ const AccordionProyecto = ({ proyecto }) => {
 };
 const FormEditProyecto = ({ _id }) => {
   const { form, formData, updateFormData } = useFormData();
-  const [editarProyecto, { data: dataMutation, loading, error }] = useMutation(EDITAR_PROYECTO);
+  const [editarProyecto, { data: dataMutation, loading, error }] =
+    useMutation(EDITAR_PROYECTO);
   const submitForm = (e) => {
     e.preventDefault();
     editarProyecto({
@@ -131,22 +135,25 @@ const FormEditProyecto = ({ _id }) => {
         onSubmit={submitForm}
         className='flex flex-col items-center'
       >
-        <DropDown label='Estado del Proyecto' name='estado' options={Enum_EstadoProyecto} />
+        <DropDown
+          label='Estado del Proyecto'
+          name='estado'
+          options={Enum_EstadoProyecto}
+        />
         <ButtonLoading disabled={false} loading={loading} text='Confirmar' />
       </form>
     </div>
   );
 };
 
-
 const Objetivo = ({ index, _id, idProyecto, tipo, descripcion }) => {
   const [showEditDialog, setShowEditDialog] = useState(false);
-  const [eliminarObjetivo, { data: dataMutationEliminar, loading: eliminarLoading }] = useMutation(
-    ELIMINAR_OBJETIVO,
-    {
-      refetchQueries: [{ query: PROYECTOS }],
-    }
-  );
+  const [
+    eliminarObjetivo,
+    { data: dataMutationEliminar, loading: eliminarLoading },
+  ] = useMutation(ELIMINAR_OBJETIVO, {
+    refetchQueries: [{ query: PROYECTOS }],
+  });
 
   useEffect(() => {
     console.log('eliminar objetivo:', dataMutationEliminar);
@@ -160,7 +167,14 @@ const Objetivo = ({ index, _id, idProyecto, tipo, descripcion }) => {
   };
 
   if (eliminarLoading)
-    return <ReactLoading data-testid='loading-in-button' type='spin' height={100} width={100} />;
+    return (
+      <ReactLoading
+        data-testid='loading-in-button'
+        type='spin'
+        height={100}
+        width={100}
+      />
+    );
   return (
     <div className='mx-5 my-4 bg-gray-50 p-8 rounded-lg flex flex-col items-center justify-center shadow-xl'>
       <div className='text-lg font-bold'>{tipo}</div>
@@ -190,12 +204,21 @@ const Objetivo = ({ index, _id, idProyecto, tipo, descripcion }) => {
   );
 };
 
-const EditarObjetivo = ({ descripcion, tipo, index, idProyecto, setShowEditDialog }) => {
+const EditarObjetivo = ({
+  descripcion,
+  tipo,
+  index,
+  idProyecto,
+  setShowEditDialog,
+}) => {
   const { form, formData, updateFormData } = useFormData();
 
-  const [editarObjetivo, { data: dataMutation, loading }] = useMutation(EDITAR_OBJETIVO, {
-    refetchQueries: [{ query: PROYECTOS }],
-  });
+  const [editarObjetivo, { data: dataMutation, loading }] = useMutation(
+    EDITAR_OBJETIVO,
+    {
+      refetchQueries: [{ query: PROYECTOS }],
+    }
+  );
 
   useEffect(() => {
     if (dataMutation) {
@@ -246,11 +269,14 @@ const EditarObjetivo = ({ descripcion, tipo, index, idProyecto, setShowEditDialo
 
 const InscripcionProyecto = ({ idProyecto, estado, inscripciones }) => {
   const [estadoInscripcion, setEstadoInscripcion] = useState('');
-  const [crearInscripcion, { data, loading, error }] = useMutation(CREAR_INSCRIPCION);
+  const [crearInscripcion, { data, loading, error }] =
+    useMutation(CREAR_INSCRIPCION);
   const { userData } = useUser();
   useEffect(() => {
     if (userData && inscripciones) {
-      const flt = inscripciones.filter((el) => el.estudiante._id === userData._id);
+      const flt = inscripciones.filter(
+        (el) => el.estudiante._id === userData._id
+      );
       if (flt.length > 0) {
         setEstadoInscripcion(flt[0].estado);
       }
@@ -263,12 +289,16 @@ const InscripcionProyecto = ({ idProyecto, estado, inscripciones }) => {
     }
   }, [data]);
   const confirmarInscripcion = () => {
-    crearInscripcion({ variables: { proyecto: idProyecto, estudiante: userData._id } });
+    crearInscripcion({
+      variables: { proyecto: idProyecto, estudiante: userData._id },
+    });
   };
   return (
     <>
       {estadoInscripcion !== '' ? (
-        <span>Ya estas inscrito en este proyecto y el estado es {estadoInscripcion}</span>
+        <span>
+          Ya estas inscrito en este proyecto y el estado es {estadoInscripcion}
+        </span>
       ) : (
         <ButtonLoading
           onClick={() => confirmarInscripcion()}

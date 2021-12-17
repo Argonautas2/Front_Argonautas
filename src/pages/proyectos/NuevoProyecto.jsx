@@ -21,8 +21,10 @@ const NuevoProyecto = () => {
     },
   });
 
-  const [crearProyecto, { data: mutationData, loading: mutationLoading, error: mutationError }] =
-    useMutation(CREAR_PROYECTO);
+  const [
+    crearProyecto,
+    { data: mutationData, loading: mutationLoading, error: mutationError },
+  ] = useMutation(CREAR_PROYECTO);
 
   useEffect(() => {
     console.log(data);
@@ -62,11 +64,36 @@ const NuevoProyecto = () => {
       </div>
       <h1 className='text-2xl font-bold text-gray-900'>Crear Nuevo Proyecto</h1>
       <form ref={form} onChange={updateFormData} onSubmit={submitForm}>
-        <Input name='nombre' label='Nombre del Proyecto' required={true} type='text' />
-        <Input name='presupuesto' label='Presupuesto del Proyecto' required={true} type='number' />
-        <Input name='fechaInicio' label='Fecha de Inicio' required={true} type='date' />
-        <Input name='fechaFin' label='Fecha de Fin' required={true} type='date' />
-        <DropDown label='Líder' options={listaUsuarios} name='lider' required={true} />
+        <Input
+          name='nombre'
+          label='Nombre del Proyecto'
+          required={true}
+          type='text'
+        />
+        <Input
+          name='presupuesto'
+          label='Presupuesto del Proyecto'
+          required={true}
+          type='number'
+        />
+        <Input
+          name='fechaInicio'
+          label='Fecha de Inicio'
+          required={true}
+          type='date'
+        />
+        <Input
+          name='fechaFin'
+          label='Fecha de Fin'
+          required={true}
+          type='date'
+        />
+        <DropDown
+          label='Líder'
+          options={listaUsuarios}
+          name='lider'
+          required={true}
+        />
         <Objetivos />
         <ButtonLoading text='Crear Proyecto' loading={false} disabled={false} />
       </form>
@@ -101,7 +128,12 @@ const Objetivos = () => {
         <span>Objetivos del Proyecto</span>
         {!maxObjetivos && (
           <i
-            onClick={() => setListaObjetivos([...listaObjetivos, componenteObjetivoAgregado()])}
+            onClick={() =>
+              setListaObjetivos([
+                ...listaObjetivos,
+                componenteObjetivoAgregado(),
+              ])
+            }
             className='fas fa-plus rounded-full bg-green-500 hover:bg-green-400 text-white p-2 mx-2 cursor-pointer'
           />
         )}

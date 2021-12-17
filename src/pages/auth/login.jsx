@@ -11,8 +11,10 @@ const Login = () => {
   const navigate = useNavigate();
   const { setToken } = useAuth();
   const { form, formData, updateFormData } = useFormData();
-  const [login, { data: dataMutation, loading: mutationLoading, error: mutationError }] =
-    useMutation(LOGIN);
+  const [
+    login,
+    { data: dataMutation, loading: mutationLoading, error: mutationError },
+  ] = useMutation(LOGIN);
   const submitForm = (e) => {
     e.preventDefault();
     login({
@@ -21,7 +23,6 @@ const Login = () => {
   };
 
   useEffect(() => {
-    
     if (dataMutation) {
       if (dataMutation.login.token) {
         setToken(dataMutation.login.token);
@@ -32,9 +33,19 @@ const Login = () => {
   return (
     <div className='flex flex-col items-center justify-center w-full h-full p-10'>
       <h1 className='text-xl font-bold text-gray-900'>Iniciar sesión</h1>
-      <form className='flex flex-col' onSubmit={submitForm} onChange={updateFormData} ref={form}>
+      <form
+        className='flex flex-col'
+        onSubmit={submitForm}
+        onChange={updateFormData}
+        ref={form}
+      >
         <Input name='correo' type='email' label='Correo' required={true} />
-        <Input name='password' type='password' label='Contraseña' required={true} />
+        <Input
+          name='password'
+          type='password'
+          label='Contraseña'
+          required={true}
+        />
         <ButtonLoading
           disabled={Object.keys(formData).length === 0}
           loading={mutationLoading}

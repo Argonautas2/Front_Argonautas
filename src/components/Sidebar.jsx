@@ -12,9 +12,17 @@ const SidebarLinks = () => {
       <PrivateComponent roleList={['ADMINISTRADOR']}>
         <SidebarRoute to='/usuarios' title='Usuarios' icon='fas fa-user' />
       </PrivateComponent>
-      <SidebarRoute to='/proyectos' title='Proyectos' icon='fas fa-smile-wink' />
+      <SidebarRoute
+        to='/proyectos'
+        title='Proyectos'
+        icon='fas fa-smile-wink'
+      />
       <PrivateComponent roleList={['ADMINISTRADOR', 'LIDER']}>
-        <SidebarRoute to='/inscripciones' title='Aprobacion Inscripciones' icon='fas fa-users' />
+        <SidebarRoute
+          to='/inscripciones'
+          title='Aprobacion Inscripciones'
+          icon='fas fa-users'
+        />
       </PrivateComponent>
       <SidebarRoute to='/page2' title='Pagina2' icon='fas fa-smile-wink' />
       <SidebarRoute to='/category1' title='Catego 1' icon='fab fa-amazon' />
@@ -60,7 +68,10 @@ const Sidebar = () => {
         </div>
       </div>
       <div className='flex md:hidden w-full justify-between bg-gray-800 p-2 text-white'>
-        <i className={`fas fa-${open ? 'times' : 'bars'}`} onClick={() => setOpen(!open)} />
+        <i
+          className={`fas fa-${open ? 'times' : 'bars'}`}
+          onClick={() => setOpen(!open)}
+        />
         <i className='fas fa-home' />
       </div>
       {open && <ResponsiveSidebar />}
@@ -116,7 +127,11 @@ const SidebarRouteImagen = ({ to, title, icon }) => {
       >
         <div className='flex items-center'>
           {userData.foto ? (
-            <img className='h-8 w-8 rounded-full' src={userData.foto} alt='foto' />
+            <img
+              className='h-8 w-8 rounded-full'
+              src={userData.foto}
+              alt='foto'
+            />
           ) : (
             <i className={icon} />
           )}
