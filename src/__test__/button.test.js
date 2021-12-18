@@ -1,4 +1,6 @@
 import { render, screen } from '@testing-library/react';
+import ButtonLoading from 'components/ButtonLoading';
+
 it('renders okay', () => {
   render(<ButtonLoading text='hola' loading={false} disabled={false} />);
   expect(screen.getByTestId('button-loading')).toBeInTheDocument();
