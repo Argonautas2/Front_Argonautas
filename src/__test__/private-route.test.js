@@ -4,7 +4,6 @@ import { render, screen} from '@testing-library/react';
 import { UserContext } from 'context/userContext';
 
 
-// eslint-disable-next-line no-undef
 it('renders not authorized if the roles dont match', () => {
   render(
     <UserContext.Provider value={{ userData: { rol: 'LIDER' } }}>
@@ -13,13 +12,10 @@ it('renders not authorized if the roles dont match', () => {
       </PrivateRoute>
     </UserContext.Provider>
   );
-  // eslint-disable-next-line no-undef
   expect(screen.getByTestId('not-authorized')).toHaveTextContent(
     'No estás autorizado para ver este sitio.'
   );
 });
-
-// eslint-disable-next-line no-undef
 it('renders the children if the user role is in the roleList', () => {
   render(
     <UserContext.Provider value={{ userData: { rol: 'ADMINISTRADOR' } }}>
@@ -28,6 +24,5 @@ it('renders the children if the user role is in the roleList', () => {
       </PrivateRoute>
     </UserContext.Provider>
   );
-  // eslint-disable-next-line no-undef
   expect(screen.getByTestId('children')).toBeInTheDocument();
 });

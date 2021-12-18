@@ -1,6 +1,3 @@
-import React from 'react';
-import ButtonLoading from 'components/ButtonLoading';
-
 import { render, screen } from '@testing-library/react';
 it('renders okay', () => {
   render(<ButtonLoading text='hola' loading={false} disabled={false} />);
