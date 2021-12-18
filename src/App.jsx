@@ -26,11 +26,11 @@ import 'styles/tabla.css';
 import NuevoProyecto from 'pages/proyectos/NuevoProyecto';
 import IndexInscripciones from 'pages/inscripciones';
 import Profile from 'pages/profile';
+import IndexAvance from 'pages/avances';
 
 // import PrivateRoute from 'components/PrivateRoute';
 
 const httpLink = createHttpLink({
-  // uri: 'http://localhost:4000/graphql',
   uri: 'https://back-grapql-misionciclo4.herokuapp.com/graphql',
 });
 const authLink = setContext((_, { headers }) => {
@@ -89,6 +89,7 @@ function App() {
                 <Route path='/proyectos' element={<IndexProyectos />} />
                 <Route path='/proyectos/nuevo' element={<NuevoProyecto />} />
                 <Route path='/inscripciones' element={<IndexInscripciones />} />
+                <Route path='/avances' element={<IndexAvance />} />
                 <Route path='/perfil' element={<Profile />} />
                 <Route path='page2' element={<Page2 />} />
                 <Route path='category1' element={<IndexCategory1 />} />
