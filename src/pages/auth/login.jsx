@@ -1,20 +1,18 @@
 import React, { useEffect } from 'react';
 import Input from 'components/Input';
 import ButtonLoading from 'components/ButtonLoading';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useFormData from 'hooks/useFormData';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from 'graphql/auth/mutations';
 import { useAuth } from 'context/authContext';
-import { useNavigate } from 'react-router-dom';
+
 const Login = () => {
   const navigate = useNavigate();
   const { setToken } = useAuth();
   const { form, formData, updateFormData } = useFormData();
-  const [
-    login,
-    { data: dataMutation, loading: mutationLoading, error: mutationError },
-  ] = useMutation(LOGIN);
+  const [login, { data: dataMutation, loading: mutationLoading }] =
+    useMutation(LOGIN);
   const submitForm = (e) => {
     e.preventDefault();
     login({
@@ -39,13 +37,8 @@ const Login = () => {
         onChange={updateFormData}
         ref={form}
       >
-        <Input name='correo' type='email' label='Correo' required={true} />
-        <Input
-          name='password'
-          type='password'
-          label='Contraseña'
-          required={true}
-        />
+        <Input name='correo' type='email' label='Correo' required />
+        <Input name='password' type='password' label='Contraseña' required />
         <ButtonLoading
           disabled={Object.keys(formData).length === 0}
           loading={mutationLoading}

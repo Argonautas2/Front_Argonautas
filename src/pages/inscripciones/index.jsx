@@ -12,11 +12,8 @@ import {
 } from 'components/Accordion';
 
 const IndexInscripciones = () => {
-  const { data, loading, error, refetch } = useQuery(GET_INSCRIPCIONES);
+  const { data, loading, refetch } = useQuery(GET_INSCRIPCIONES);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
   if (loading) return <div>Loading...</div>;
   return (
     <PrivateRoute roleList={['ADMINISTRADOR', 'LIDER']}>
@@ -42,25 +39,21 @@ const IndexInscripciones = () => {
   );
 };
 
-const AccordionInscripcion = ({ data, titulo, refetch = () => {} }) => {
-  return (
-    <AccordionStyled>
-      <AccordionSummaryStyled>
-        {titulo} ({data.length})
-      </AccordionSummaryStyled>
-      <AccordionDetailsStyled>
-        <div className='flex'>
-          {data &&
-            data.map((inscripcion) => {
-              return (
-                <Inscripcion inscripcion={inscripcion} refetch={refetch} />
-              );
-            })}
-        </div>
-      </AccordionDetailsStyled>
-    </AccordionStyled>
-  );
-};
+const AccordionInscripcion = ({ data, titulo, refetch = () => {} }) => (
+  <AccordionStyled>
+    <AccordionSummaryStyled>
+      {titulo} ({data.length})
+    </AccordionSummaryStyled>
+    <AccordionDetailsStyled>
+      <div className='flex'>
+        {data &&
+          data.map((inscripcion) => (
+            <Inscripcion inscripcion={inscripcion} refetch={refetch} />
+          ))}
+      </div>
+    </AccordionDetailsStyled>
+  </AccordionStyled>
+);
 
 const Inscripcion = ({ inscripcion, refetch }) => {
   const [aprobarInscripcion, { data, loading, error }] =

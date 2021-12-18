@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { EDITAR_USUARIO } from 'graphql/usuarios/mutations';
 import DropDown from 'components/DropDown';
 import { Enum_EstadoUsuario } from 'utils/enums';
+
 const EditarUsuario = () => {
   const { form, formData, updateFormData } = useFormData(null);
   const { _id } = useParams();
@@ -66,34 +67,34 @@ const EditarUsuario = () => {
           type='text'
           name='nombre'
           defaultValue={queryData.Usuario.nombre}
-          required={true}
+          required
         />
         <Input
           label='Apellido de la persona:'
           type='text'
           name='apellido'
           defaultValue={queryData.Usuario.apellido}
-          required={true}
+          required
         />
         <Input
           label='Correo de la persona:'
           type='email'
           name='correo'
           defaultValue={queryData.Usuario.correo}
-          required={true}
+          required
         />
         <Input
           label='Identificación de la persona:'
           type='text'
           name='identificacion'
           defaultValue={queryData.Usuario.identificacion}
-          required={true}
+          required
         />
         <DropDown
           label='Estado de la persona:'
           name='estado'
           defaultValue={queryData.Usuario.estado}
-          required={true}
+          required
           options={Enum_EstadoUsuario}
         />
         <span>Rol del usuario: {queryData.Usuario.rol}</span>

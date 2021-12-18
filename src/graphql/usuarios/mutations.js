@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+
 const EDITAR_USUARIO = gql`
   mutation EditarUsuario(
     $_id: String!

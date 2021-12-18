@@ -14,15 +14,12 @@ const Profile = () => {
   const { form, formData, updateFormData } = useFormData();
   const { userData, setUserData } = useUser();
 
-  const [
-    editarPerfil,
-    { data: dataMutation, error: errorMutation, loading: loadingMutation },
-  ] = useMutation(EDITAR_PERFIL);
+  const [editarPerfil, { data: dataMutation, loading: loadingMutation }] =
+    useMutation(EDITAR_PERFIL);
 
   const {
     data: queryData,
     loading: queryLoading,
-    error: queryError,
     refetch,
   } = useQuery(GET_USUARIO, {
     variables: {
@@ -32,23 +29,16 @@ const Profile = () => {
 
   useEffect(() => {
     if (dataMutation) {
-      console.log('data mutation', dataMutation);
       setUserData({ ...userData, foto: dataMutation.editarPerfil.foto });
       toast.success('Perfil modificado con exito');
       refetch();
     }
   }, [dataMutation]);
 
-  useEffect(() => {
-    console.log('ud', queryData);
-  }, [queryData]);
-
   const submitForm = async (e) => {
     e.preventDefault();
 
     const formUploaded = await uploadFormData(formData);
-
-    console.log('form cargado', formUploaded);
 
     editarPerfil({
       variables: {
@@ -69,21 +59,21 @@ const Profile = () => {
           label='Nombre'
           name='nombre'
           type='text'
-          required={true}
+          required
         />
         <Input
           defaultValue={queryData.Usuario.apellido}
           label='Apellido'
           name='apellido'
           type='text'
-          required={true}
+          required
         />
         <Input
           defaultValue={queryData.Usuario.identificacion}
           label='Identificación'
           name='identificacion'
           type='text'
-          required={true}
+          required
         />
         {queryData.Usuario.foto && !editFoto ? (
           <div className='flex flex-col items-center'>
@@ -93,6 +83,7 @@ const Profile = () => {
               alt='Foto Usuario'
             />
             <button
+              type='button'
               onClick={() => setEditFoto(true)}
               className='bg-indigo-300 p-1 my-2 rounded-md text-white'
             >
@@ -101,8 +92,9 @@ const Profile = () => {
           </div>
         ) : (
           <div>
-            <Input label='Foto' name='foto' type='file' required={true} />
+            <Input label='Foto' name='foto' type='file' required />
             <button
+              type='button'
               onClick={() => setEditFoto(false)}
               className='bg-indigo-300 p-1 my-2 rounded-md text-white'
             >

@@ -4,9 +4,13 @@ import { PROYECTOS } from 'graphql/proyectos/queries';
 import DropDown from 'components/DropDown';
 import Input from 'components/Input';
 import { Dialog } from '@mui/material';
-import { Enum_EstadoProyecto } from 'utils/enums';
+import { Enum_EstadoProyecto, Enum_TipoObjetivo } from 'utils/enums';
 import ButtonLoading from 'components/ButtonLoading';
-import { EDITAR_PROYECTO } from 'graphql/proyectos/mutations';
+import {
+  EDITAR_PROYECTO,
+  ELIMINAR_OBJETIVO,
+  EDITAR_OBJETIVO,
+} from 'graphql/proyectos/mutations';
 import useFormData from 'hooks/useFormData';
 import PrivateComponent from 'components/PrivateComponent';
 import { Link } from 'react-router-dom';
@@ -18,18 +22,12 @@ import {
   AccordionSummaryStyled,
   AccordionDetailsStyled,
 } from 'components/Accordion';
-import { ELIMINAR_OBJETIVO } from 'graphql/proyectos/mutations';
 import ReactLoading from 'react-loading';
-import { Enum_TipoObjetivo } from 'utils/enums';
-import { EDITAR_OBJETIVO } from 'graphql/proyectos/mutations';
 
 const IndexProyectos = () => {
   const { data: queryData, loading } = useQuery(PROYECTOS);
-
-  useEffect(() => {
-    console.log('datos proyecto', queryData);
-  }, [queryData]);
   if (loading) return <div>Cargando...</div>;
+
   if (queryData.Proyectos) {
     return (
       <div className='p-10 flex flex-col'>
@@ -40,14 +38,17 @@ const IndexProyectos = () => {
         </div>
         <PrivateComponent roleList={['ADMINISTRADOR', 'LIDER']}>
           <div className='my-2 self-end'>
-            <button className='bg-indigo-500 text-gray-50 p-2 rounded-lg shadow-lg hover:bg-indigo-400'>
+            <button
+              type='button'
+              className='bg-indigo-500 text-gray-50 p-2 rounded-lg shadow-lg hover:bg-indigo-400'
+            >
               <Link to='/proyectos/nuevo'>Crear nuevo proyecto</Link>
             </button>
           </div>
         </PrivateComponent>
-        {queryData.Proyectos.map((proyecto) => {
-          return <AccordionProyecto proyecto={proyecto} />;
-        })}
+        {queryData.Proyectos.map((proyecto) => (
+          <AccordionProyecto proyecto={proyecto} />
+        ))}
       </div>
     );
   }
@@ -69,12 +70,14 @@ const AccordionProyecto = ({ proyecto }) => {
         </AccordionSummaryStyled>
         <AccordionDetailsStyled>
           <PrivateComponent roleList={['ADMINISTRADOR']}>
-            <i
-              className='mx-4 fas fa-pen text-yellow-600 hover:text-yellow-400'
+            <button
+              type='button'
               onClick={() => {
                 setShowDialog(true);
               }}
-            />
+            >
+              <i className='mx-4 fas fa-pen text-yellow-600 hover:text-yellow-400' />
+            </button>
           </PrivateComponent>
           <PrivateComponent roleList={['ESTUDIANTE']}>
             <InscripcionProyecto
@@ -85,17 +88,15 @@ const AccordionProyecto = ({ proyecto }) => {
           </PrivateComponent>
           <div>Liderado Por: {proyecto.lider.correo}</div>
           <div className='flex'>
-            {proyecto.objetivos.map((objetivo, index) => {
-              return (
-                <Objetivo
-                  index={index}
-                  _id={objetivo._id}
-                  idProyecto={proyecto._id}
-                  tipo={objetivo.tipo}
-                  descripcion={objetivo.descripcion}
-                />
-              );
-            })}
+            {proyecto.objetivos.map((objetivo, index) => (
+              <Objetivo
+                index={index}
+                _id={objetivo._id}
+                idProyecto={proyecto._id}
+                tipo={objetivo.tipo}
+                descripcion={objetivo.descripcion}
+              />
+            ))}
           </div>
         </AccordionDetailsStyled>
       </AccordionStyled>
@@ -110,10 +111,11 @@ const AccordionProyecto = ({ proyecto }) => {
     </>
   );
 };
+
 const FormEditProyecto = ({ _id }) => {
   const { form, formData, updateFormData } = useFormData();
-  const [editarProyecto, { data: dataMutation, loading, error }] =
-    useMutation(EDITAR_PROYECTO);
+  const [editarProyecto, { loading }] = useMutation(EDITAR_PROYECTO);
+
   const submitForm = (e) => {
     e.preventDefault();
     editarProyecto({
@@ -123,9 +125,6 @@ const FormEditProyecto = ({ _id }) => {
       },
     });
   };
-  useEffect(() => {
-    console.log('data mutation', dataMutation);
-  }, [dataMutation]);
   return (
     <div className='p-4'>
       <h1 className='font-bold'>Modificar Estado del Proyecto</h1>
@@ -156,12 +155,10 @@ const Objetivo = ({ index, _id, idProyecto, tipo, descripcion }) => {
   });
 
   useEffect(() => {
-    console.log('eliminar objetivo:', dataMutationEliminar);
     if (dataMutationEliminar) {
       toast.success('objetivo eliminado satisfactoriamente');
     }
   }, [dataMutationEliminar]);
-
   const ejecutarEliminacion = () => {
     eliminarObjetivo({ variables: { idProyecto, idObjetivo: _id } });
   };
@@ -181,14 +178,12 @@ const Objetivo = ({ index, _id, idProyecto, tipo, descripcion }) => {
       <div>{descripcion}</div>
       <PrivateComponent roleList={['ADMINISTRADOR', 'LIDER']}>
         <div className='flex my-2'>
-          <i
-            onClick={() => setShowEditDialog(true)}
-            className='fas fa-pen mx-2 text-yellow-500 hover:text-yellow-200 cursor-pointer'
-          />
-          <i
-            onClick={ejecutarEliminacion}
-            className='fas fa-trash mx-2 text-red-500 hover:text-red-200 cursor-pointer'
-          />
+          <button type='button' onClick={() => setShowEditDialog(true)}>
+            <i className='fas fa-pen mx-2 text-yellow-500 hover:text-yellow-200 cursor-pointer' />
+          </button>
+          <button type='button' onClick={ejecutarEliminacion}>
+            <i className='fas fa-trash mx-2 text-red-500 hover:text-red-200 cursor-pointer' />
+          </button>
         </div>
         <Dialog open={showEditDialog} onClose={() => setShowEditDialog(false)}>
           <EditarObjetivo
@@ -203,7 +198,6 @@ const Objetivo = ({ index, _id, idProyecto, tipo, descripcion }) => {
     </div>
   );
 };
-
 const EditarObjetivo = ({
   descripcion,
   tipo,
@@ -212,7 +206,6 @@ const EditarObjetivo = ({
   setShowEditDialog,
 }) => {
   const { form, formData, updateFormData } = useFormData();
-
   const [editarObjetivo, { data: dataMutation, loading }] = useMutation(
     EDITAR_OBJETIVO,
     {
@@ -226,7 +219,6 @@ const EditarObjetivo = ({
       setShowEditDialog(false);
     }
   }, [dataMutation, setShowEditDialog]);
-
   const submitForm = (e) => {
     e.preventDefault();
     editarObjetivo({
@@ -235,9 +227,8 @@ const EditarObjetivo = ({
         indexObjetivo: index,
         campos: formData,
       },
-    }).catch((e) => {
-      console.log(e);
-      toast.error('Error editando el objetivo');
+    }).catch((error) => {
+      toast.error('Error editando el objetivo', error);
     });
   };
   return (
@@ -247,14 +238,14 @@ const EditarObjetivo = ({
         <DropDown
           label='Tipo de Objetivo'
           name='tipo'
-          required={true}
+          required
           options={Enum_TipoObjetivo}
           defaultValue={tipo}
         />
         <Input
           label='Descripcion del objetivo'
           name='descripcion'
-          required={true}
+          required
           defaultValue={descripcion}
         />
         <ButtonLoading
@@ -269,9 +260,9 @@ const EditarObjetivo = ({
 
 const InscripcionProyecto = ({ idProyecto, estado, inscripciones }) => {
   const [estadoInscripcion, setEstadoInscripcion] = useState('');
-  const [crearInscripcion, { data, loading, error }] =
-    useMutation(CREAR_INSCRIPCION);
+  const [crearInscripcion, { data, loading }] = useMutation(CREAR_INSCRIPCION);
   const { userData } = useUser();
+
   useEffect(() => {
     if (userData && inscripciones) {
       const flt = inscripciones.filter(
@@ -282,17 +273,19 @@ const InscripcionProyecto = ({ idProyecto, estado, inscripciones }) => {
       }
     }
   }, [userData, inscripciones]);
+
   useEffect(() => {
     if (data) {
-      console.log(data);
       toast.success('inscripcion creada con exito');
     }
   }, [data]);
+
   const confirmarInscripcion = () => {
     crearInscripcion({
       variables: { proyecto: idProyecto, estudiante: userData._id },
     });
   };
+
   return (
     <>
       {estadoInscripcion !== '' ? (
