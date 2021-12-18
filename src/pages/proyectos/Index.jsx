@@ -24,6 +24,7 @@ import {
 } from 'components/Accordion';
 
 import ReactLoading from 'react-loading';
+
 const IndexProyectos = () => {
   const { data: queryData, loading } = useQuery(PROYECTOS);
   if (loading) return <div>Cargando...</div>;
