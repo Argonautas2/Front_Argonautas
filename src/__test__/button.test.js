@@ -1,5 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import React from 'react';
 import ButtonLoading from 'components/ButtonLoading';
+import { render, screen } from '@testing-library/react';
 
 it('renders okay', () => {
   render(<ButtonLoading text='hola' loading={false} disabled={false} />);
@@ -24,4 +25,8 @@ it('is disabled when prop is passed', () => {
 it('is enabled when disabled prop is passed as false', () => {
   render(<ButtonLoading text='hola' loading={true} disabled={false} />);
   expect(screen.getByTestId('button-loading')).not.toHaveAttribute('disabled');
+});
+it('loads the svg html when loading is activated', () => {
+  render(<ButtonLoading text='hola' loading={true} disabled={false} />);
+  expect(screen.getByTestId('button-loading')).toMatchSnapshot();
 });

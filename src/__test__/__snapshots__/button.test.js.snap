@@ -39,8 +39,10 @@ exports[`loads the svg html when loading is activated 1`] = `
   
       </path>
       
+
     </svg>
     
+
   </div>
 </button>
 `;
