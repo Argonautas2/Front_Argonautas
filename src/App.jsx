@@ -31,7 +31,8 @@ import IndexAvance from 'pages/avances';
 // import PrivateRoute from 'components/PrivateRoute';
 
 const httpLink = createHttpLink({
-  uri: 'https://back-grapql-misionciclo4.herokuapp.com/graphql',
+ uri: 'https://back-grapql-misionciclo4.herokuapp.com/graphql',
+ 
 });
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
