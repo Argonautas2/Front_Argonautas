@@ -22,6 +22,7 @@ import {
   AccordionSummaryStyled,
   AccordionDetailsStyled,
 } from 'components/Accordion';
+
 import ReactLoading from 'react-loading';
 const IndexProyectos = () => {
   const { data: queryData, loading } = useQuery(PROYECTOS);
@@ -279,7 +280,7 @@ const InscripcionProyecto = ({ idProyecto, estado, inscripciones }) => {
   return (
     <>
       {estadoInscripcion !== '' ? (
-      <div className='flex flex-col items-start'>
+        <div className='flex flex-col items-start'>
           <span>
             Ya estas inscrito en este proyecto y el estado es{' '}
             {estadoInscripcion}
