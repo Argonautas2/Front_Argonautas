@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { PROYECTOS } from 'graphql/proyectos/queries';
-import DropDown from 'components/DropDown';
+import DropDown from 'components/Dropdown';
 import Input from 'components/Input';
 import { Dialog } from '@mui/material';
 import { Enum_EstadoProyecto, Enum_TipoObjetivo } from 'utils/enums';
@@ -23,11 +23,9 @@ import {
   AccordionDetailsStyled,
 } from 'components/Accordion';
 import ReactLoading from 'react-loading';
-
 const IndexProyectos = () => {
   const { data: queryData, loading } = useQuery(PROYECTOS);
   if (loading) return <div>Cargando...</div>;
-
   if (queryData.Proyectos) {
     return (
       <div className='p-10 flex flex-col'>
@@ -111,11 +109,11 @@ const AccordionProyecto = ({ proyecto }) => {
     </>
   );
 };
-
 const FormEditProyecto = ({ _id }) => {
   const { form, formData, updateFormData } = useFormData();
+  // falta capturar error de la mutacion
+  // falta toast de success
   const [editarProyecto, { loading }] = useMutation(EDITAR_PROYECTO);
-
   const submitForm = (e) => {
     e.preventDefault();
     editarProyecto({
@@ -144,7 +142,6 @@ const FormEditProyecto = ({ _id }) => {
     </div>
   );
 };
-
 const Objetivo = ({ index, _id, idProyecto, tipo, descripcion }) => {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [
@@ -153,7 +150,6 @@ const Objetivo = ({ index, _id, idProyecto, tipo, descripcion }) => {
   ] = useMutation(ELIMINAR_OBJETIVO, {
     refetchQueries: [{ query: PROYECTOS }],
   });
-
   useEffect(() => {
     if (dataMutationEliminar) {
       toast.success('objetivo eliminado satisfactoriamente');
@@ -162,7 +158,6 @@ const Objetivo = ({ index, _id, idProyecto, tipo, descripcion }) => {
   const ejecutarEliminacion = () => {
     eliminarObjetivo({ variables: { idProyecto, idObjetivo: _id } });
   };
-
   if (eliminarLoading)
     return (
       <ReactLoading
@@ -212,7 +207,6 @@ const EditarObjetivo = ({
       refetchQueries: [{ query: PROYECTOS }],
     }
   );
-
   useEffect(() => {
     if (dataMutation) {
       toast.success('Objetivo editado con exito');
@@ -257,12 +251,11 @@ const EditarObjetivo = ({
     </div>
   );
 };
-
 const InscripcionProyecto = ({ idProyecto, estado, inscripciones }) => {
   const [estadoInscripcion, setEstadoInscripcion] = useState('');
+  // falta captura del error de la mutacion
   const [crearInscripcion, { data, loading }] = useMutation(CREAR_INSCRIPCION);
   const { userData } = useUser();
-
   useEffect(() => {
     if (userData && inscripciones) {
       const flt = inscripciones.filter(
@@ -273,25 +266,33 @@ const InscripcionProyecto = ({ idProyecto, estado, inscripciones }) => {
       }
     }
   }, [userData, inscripciones]);
-
   useEffect(() => {
     if (data) {
       toast.success('inscripcion creada con exito');
     }
   }, [data]);
-
   const confirmarInscripcion = () => {
     crearInscripcion({
       variables: { proyecto: idProyecto, estudiante: userData._id },
     });
   };
-
   return (
     <>
       {estadoInscripcion !== '' ? (
-        <span>
-          Ya estas inscrito en este proyecto y el estado es {estadoInscripcion}
-        </span>
+               <div className='flex flex-col items-start'>
+          <span>
+            Ya estas inscrito en este proyecto y el estado es{' '}
+            {estadoInscripcion}
+          </span>
+          {estadoInscripcion === 'ACEPTADO' && (
+            <Link
+              to={`/avances/${idProyecto}`}
+              className='bg-yellow-700 p-2 rounded-lg text-white my-2 hover:bg-yellow-500'
+            >
+              Agregar Avance
+            </Link>
+          )}
+        </div>
       ) : (
         <ButtonLoading
           onClick={() => confirmarInscripcion()}
